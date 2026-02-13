@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, type TextStyle, type ViewStyle } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { MotiView } from 'moti';
 import { useLibraryStore } from '@/store/useLibrary';
@@ -59,11 +59,11 @@ export default function AILabScreen() {
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <Pressable onPress={runExamples} disabled={loading} style={pill('#a855f7', loading)}>
               <Feather name="book-open" size={16} color="white" />
-              <Text style={pillText('white')}>{loading ? 'Loading…' : 'Review by example'}</Text>
+              <Text style={pillText('white')}>{loading ? 'Loading...' : 'Review by example'}</Text>
             </Pressable>
             <Pressable onPress={runQuiz} disabled={loading} style={pill('#f59e0b', loading)}>
               <Feather name="help-circle" size={16} color="#0f172a" />
-              <Text style={pillText('#0f172a')}>{loading ? 'Loading…' : 'Quiz'}</Text>
+              <Text style={pillText('#0f172a')}>{loading ? 'Loading...' : 'Quiz'}</Text>
             </Pressable>
           </View>
         </View>
@@ -75,7 +75,7 @@ export default function AILabScreen() {
                 style={{ backgroundColor: '#111827', padding: 14, borderRadius: 14, borderWidth: 1, borderColor: '#1f2937', gap: 6 }}>
                 <Text style={{ color: '#a855f7', fontWeight: '800' }}>{ex.word}</Text>
                 {ex.sentences.map((s, i) => (
-                  <Text key={i} style={{ color: '#e2e8f0' }}>• {s}</Text>
+                  <Text key={i} style={{ color: '#e2e8f0' }}>- {s}</Text>
                 ))}
               </MotiView>
             ))}
@@ -99,10 +99,10 @@ export default function AILabScreen() {
         )}
       </ScrollView>
     </LinearGradient>
-  );
+ );
 }
 
-const pill = (bg: string, disabled: boolean) => ({
+const pill = (bg: string, disabled: boolean): ViewStyle => ({
   backgroundColor: disabled ? '#334155' : bg,
   paddingVertical: 12,
   paddingHorizontal: 12,
@@ -114,4 +114,4 @@ const pill = (bg: string, disabled: boolean) => ({
   justifyContent: 'center'
 });
 
-const pillText = (color: string) => ({ color, fontWeight: '800', fontSize: 14 });
+const pillText = (color: string): TextStyle => ({ color, fontWeight: '800', fontSize: 14 });

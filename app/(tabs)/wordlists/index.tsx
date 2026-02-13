@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, View, type TextStyle, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
@@ -65,7 +65,7 @@ export default function WordlistsScreen() {
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View>
                   <Text style={{ color: 'white', fontSize: 18, fontWeight: '700' }}>{item.name}</Text>
-                  <Text style={{ color: '#94a3b8', fontSize: 12 }}>{countFor(item.id)} cards • Order: {item.order}</Text>
+                  <Text style={{ color: '#94a3b8', fontSize: 12 }}>{countFor(item.id)} cards - Order: {item.order}</Text>
                 </View>
                 <Pressable
                   onPress={() => confirmDelete(() => deleteWordlist(item.id))}
@@ -132,7 +132,7 @@ function confirmDelete(onConfirm: () => void) {
   ]);
 }
 
-const pill = (bg: string) => ({
+const pill = (bg: string): ViewStyle => ({
   backgroundColor: bg,
   paddingVertical: 10,
   paddingHorizontal: 12,
@@ -142,4 +142,4 @@ const pill = (bg: string) => ({
   gap: 6
 });
 
-const pillText = (color: string) => ({ color, fontWeight: '800', fontSize: 13 });
+const pillText = (color: string): TextStyle => ({ color, fontWeight: '800', fontSize: 13 });

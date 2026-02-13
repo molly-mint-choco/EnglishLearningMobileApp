@@ -15,6 +15,10 @@ interface LibraryState {
   folders: Record<string, Folder>;
   folderWordlists: FolderWordlist[];
   addFlashcard: (payload: Omit<Flashcard, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) => Flashcard;
+  updateFlashcard: (
+    id: string,
+    patch: Partial<Pick<Flashcard, 'word' | 'meaning' | 'comment' | 'dictionaryId' | 'audioUrl'>>
+  ) => void;
   updateFlashcardComment: (id: string, comment: string) => void;
   deleteFlashcard: (id: string) => void;
   addWordlist: (payload: Pick<Wordlist, 'name' | 'comment' | 'order'>) => Wordlist;
@@ -48,11 +52,39 @@ export const useLibraryStore = create<LibraryState>((set, get) => ({
       createdAt: now(),
       updatedAt: now(),
       createdBy: get().userId,
-      frequency: payload.frequency ?? 0,
-      ...payload
+      ...payload,
+      frequency: payload.frequency ?? 0
     };
     set((state) => ({ flashcards: { ...state.flashcards, [id]: card }, stats: { ...state.stats, flashcards: Object.keys(state.flashcards).length + 1 } }));
     return card;
+  },
+
+  updateFlashcard: (id, patch) => {
+    const existing = get().flashcards[id];
+    if (!existing) return;
+
+    const nextWord = (patch.word ?? existing.word).trim();
+    const nextMeaning = (patch.meaning ?? existing.meaning).trim();
+    const nextComment = patch.comment === undefined ? existing.comment : patch.comment;
+
+    if (!nextWord) throw new Error('Word is required');
+    if (!nextMeaning) throw new Error('Meaning is required');
+    if ((nextComment ?? '').length > 500) throw new Error('Comment max length is 500 characters');
+
+    set((state) => ({
+      ...state,
+      flashcards: {
+        ...state.flashcards,
+        [id]: {
+          ...existing,
+          ...patch,
+          word: nextWord,
+          meaning: nextMeaning,
+          comment: nextComment,
+          updatedAt: now()
+        }
+      }
+    }));
   },
 
   updateFlashcardComment: (id, comment) => {

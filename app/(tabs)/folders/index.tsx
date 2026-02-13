@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, View, type TextStyle, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { useLibraryStore } from '@/store/useLibrary';
@@ -90,7 +90,7 @@ function confirmDelete(onConfirm: () => void) {
   ]);
 }
 
-const inputStyle = {
+const inputStyle: TextStyle = {
   backgroundColor: '#0f172a',
   color: 'white',
   padding: 12,
@@ -99,7 +99,7 @@ const inputStyle = {
   borderColor: '#1f2937'
 };
 
-const chip = (bg: string) => ({
+const chip = (bg: string): ViewStyle => ({
   backgroundColor: bg,
   paddingVertical: 8,
   paddingHorizontal: 10,
@@ -109,4 +109,4 @@ const chip = (bg: string) => ({
   alignItems: 'center'
 });
 
-const chipText = (color: string) => ({ color, fontWeight: '700' });
+const chipText = (color: string): TextStyle => ({ color, fontWeight: '700' });

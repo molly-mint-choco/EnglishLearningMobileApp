@@ -1,7 +1,7 @@
 import { useLocalSearchParams, Stack } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View, type TextStyle, type ViewStyle } from 'react-native';
 import { MotiView } from 'moti';
 import { useLibraryStore } from '@/store/useLibrary';
 import { Flashcard } from '@/types';
@@ -21,7 +21,7 @@ export default function LearnScreen() {
 
   return (
     <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1, paddingTop: 48 }}>
-      <Stack.Screen options={{ headerShown: true, headerTitle: `Learn • ${wordlist.name}`, headerTintColor: 'white', headerStyle: { backgroundColor: '#0f172a' } }} />
+      <Stack.Screen options={{ headerShown: true, headerTitle: `Learn - ${wordlist.name}`, headerTintColor: 'white', headerStyle: { backgroundColor: '#0f172a' } }} />
       <View style={{ flex: 1, padding: 20, gap: 20 }}>
         <MotiView
           from={{ opacity: 0, translateY: 14 }}
@@ -72,7 +72,7 @@ function orderedCards(
   return arr;
 }
 
-const pill = (bg: string) => ({
+const pill = (bg: string): ViewStyle => ({
   backgroundColor: bg,
   paddingVertical: 14,
   paddingHorizontal: 16,
@@ -81,4 +81,4 @@ const pill = (bg: string) => ({
   flex: 1
 });
 
-const pillText = (color: string) => ({ color, fontWeight: '800', fontSize: 15 });
+const pillText = (color: string): TextStyle => ({ color, fontWeight: '800', fontSize: 15 });

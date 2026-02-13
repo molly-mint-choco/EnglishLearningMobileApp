@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { useColorScheme } from 'react-native';
 
 const tabBarStyle = {
   backgroundColor: '#0b1224',
@@ -11,9 +10,6 @@ const tabBarStyle = {
 };
 
 export default function TabsLayout() {
-  const scheme = useColorScheme();
-  const isDark = scheme !== 'light';
-
   const activeColor = '#8b5cf6';
   const inactiveColor = '#94a3b8';
 
@@ -28,17 +24,24 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => <Feather name="home" size={size} color={color} />
-        }}
-      />
-      <Tabs.Screen
         name="wordlists/index"
         options={{
           title: 'Wordlists',
           tabBarIcon: ({ color, size }) => <Feather name="layers" size={size} color={color} />
+        }}
+      />
+      <Tabs.Screen
+        name="search/index"
+        options={{
+          title: 'Search',
+          tabBarIcon: ({ color, size }) => <Feather name="search" size={size} color={color} />
+        }}
+      />
+      <Tabs.Screen
+        name="flashcards/index"
+        options={{
+          title: 'Flashcards',
+          tabBarIcon: ({ color, size }) => <Feather name="book-open" size={size} color={color} />
         }}
       />
       <Tabs.Screen
@@ -52,6 +55,7 @@ export default function TabsLayout() {
         name="ai-lab/index"
         options={{
           title: 'AI Lab',
+          href: null,
           tabBarIcon: ({ color, size }) => <Feather name="zap" size={size} color={color} />
         }}
       />

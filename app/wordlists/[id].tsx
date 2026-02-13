@@ -1,6 +1,6 @@
-import { useLocalSearchParams, Stack } from 'expo-router';
+import { useLocalSearchParams, Stack, router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, View, type TextStyle, type ViewStyle } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useLibraryStore } from '@/store/useLibrary';
 
@@ -13,8 +13,7 @@ export default function WordlistDetail() {
     addFlashcard,
     addFlashcardToWordlist,
     removeFlashcardFromWordlist,
-    bumpFrequency,
-    updateFlashcardComment
+    bumpFrequency
   } = useLibraryStore();
 
   const wordlist = wordlists[id!];
@@ -100,7 +99,7 @@ export default function WordlistDetail() {
                 <Feather name="bar-chart-2" size={14} color="white" />
                 <Text style={pillText('white')}>Seen {item.frequency}</Text>
               </Pressable>
-              <Pressable onPress={() => updateFlashcardComment(item.id, (item.comment || '') + '')} style={pill('#22d3ee')}>
+              <Pressable onPress={() => router.push({ pathname: '/flashcards', params: { id: item.id } })} style={pill('#22d3ee')}>
                 <Feather name="edit-3" size={14} color="#0f172a" />
                 <Text style={pillText('#0f172a')}>Edit comment</Text>
               </Pressable>
@@ -112,7 +111,7 @@ export default function WordlistDetail() {
   );
 }
 
-const inputStyle = {
+const inputStyle: TextStyle = {
   backgroundColor: '#0f172a',
   color: 'white',
   padding: 12,
@@ -121,7 +120,7 @@ const inputStyle = {
   borderColor: '#1f2937'
 };
 
-const pill = (bg: string) => ({
+const pill = (bg: string): ViewStyle => ({
   backgroundColor: bg,
   paddingVertical: 8,
   paddingHorizontal: 10,
@@ -131,4 +130,4 @@ const pill = (bg: string) => ({
   alignItems: 'center'
 });
 
-const pillText = (color: string) => ({ color, fontWeight: '700', fontSize: 12 });
+const pillText = (color: string): TextStyle => ({ color, fontWeight: '700', fontSize: 12 });
