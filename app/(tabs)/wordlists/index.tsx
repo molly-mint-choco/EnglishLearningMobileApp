@@ -6,6 +6,7 @@ import { Link } from 'expo-router';
 import { MotiView } from 'moti';
 import { useLibraryStore } from '@/store/useLibrary';
 import { OrderStrategy } from '@/types';
+import { ScreenHeader } from '@/components/ScreenHeader';
 
 export default function WordlistsScreen() {
   const {
@@ -23,8 +24,8 @@ export default function WordlistsScreen() {
 
   return (
     <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ padding: 18, paddingTop: 48, gap: 14 }}>
-        <Text style={{ color: 'white', fontSize: 24, fontWeight: '800' }}>Wordlists</Text>
+      <ScreenHeader title="Wordlists" />
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 18, gap: 14 }}>
         <Text style={{ color: '#cbd5e1' }}>Create decks, reorder, and jump into Learn/Test.</Text>
 
         <View style={{ backgroundColor: '#111827', padding: 14, borderRadius: 16, gap: 12, borderWidth: 1, borderColor: '#1f2937' }}>

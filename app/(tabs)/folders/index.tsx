@@ -3,6 +3,7 @@ import { Alert, FlatList, Pressable, ScrollView, Text, TextInput, View, type Tex
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { useLibraryStore } from '@/store/useLibrary';
+import { ScreenHeader } from '@/components/ScreenHeader';
 
 export default function FoldersScreen() {
   const { folders, addFolder, deleteFolder, wordlists, folderWordlists, addWordlistToFolder, removeWordlistFromFolder } = useLibraryStore();
@@ -12,8 +13,8 @@ export default function FoldersScreen() {
 
   return (
     <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ padding: 18, paddingTop: 48, gap: 14 }}>
-        <Text style={{ color: 'white', fontSize: 24, fontWeight: '800' }}>Folders</Text>
+      <ScreenHeader title="Folders" />
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 18, gap: 14 }}>
         <Text style={{ color: '#cbd5e1' }}>Group wordlists for courses or themes.</Text>
 
         <View style={{ backgroundColor: '#111827', padding: 14, borderRadius: 16, gap: 10, borderWidth: 1, borderColor: '#1f2937' }}>

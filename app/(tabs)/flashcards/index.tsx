@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import { useLibraryStore } from '@/store/useLibrary';
 import { Flashcard } from '@/types';
+import { ScreenHeader } from '@/components/ScreenHeader';
 
 export default function FlashcardsScreen() {
   const params = useLocalSearchParams<{ id?: string }>();
@@ -126,15 +127,14 @@ export default function FlashcardsScreen() {
 
   return (
     <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1 }}>
+      <ScreenHeader title="Flashcards" subtitle={`All cards: ${stats.flashcards}`} />
       <FlatList
         data={filtered}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 18, paddingTop: 48, gap: 12 }}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 18, gap: 12 }}
         ListHeaderComponent={
           <View style={{ gap: 14 }}>
-            <Text style={{ color: 'white', fontSize: 24, fontWeight: '800' }}>Flashcards</Text>
-            <Text style={{ color: '#cbd5e1' }}>All cards: {stats.flashcards}</Text>
-
             <View style={{ backgroundColor: '#111827', padding: 14, borderRadius: 16, borderWidth: 1, borderColor: '#1f2937', gap: 10 }}>
               <Text style={{ color: '#e2e8f0', fontWeight: '700' }}>Add flashcard</Text>
               <TextInput
