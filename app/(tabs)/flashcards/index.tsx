@@ -6,8 +6,10 @@ import { useLocalSearchParams } from 'expo-router';
 import { useLibraryStore } from '@/store/useLibrary';
 import { Flashcard } from '@/types';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { useAppTheme, type AppColors } from '@/theme/useAppTheme';
 
 export default function FlashcardsScreen() {
+  const { colors, gradient } = useAppTheme();
   const params = useLocalSearchParams<{ id?: string }>();
   const {
     flashcards,
@@ -126,7 +128,7 @@ export default function FlashcardsScreen() {
   };
 
   return (
-    <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1 }}>
+    <LinearGradient colors={gradient} style={{ flex: 1 }}>
       <ScreenHeader title="Flashcards" subtitle={`All cards: ${stats.flashcards}`} />
       <FlatList
         data={filtered}
@@ -135,35 +137,35 @@ export default function FlashcardsScreen() {
         contentContainerStyle={{ padding: 18, gap: 12 }}
         ListHeaderComponent={
           <View style={{ gap: 14 }}>
-            <View style={{ backgroundColor: '#111827', padding: 14, borderRadius: 16, borderWidth: 1, borderColor: '#1f2937', gap: 10 }}>
-              <Text style={{ color: '#e2e8f0', fontWeight: '700' }}>Add flashcard</Text>
+            <View style={{ backgroundColor: colors.surface, padding: 14, borderRadius: 16, borderWidth: 1, borderColor: colors.border, gap: 10 }}>
+              <Text style={{ color: colors.text, fontWeight: '700' }}>Add flashcard</Text>
               <TextInput
                 value={newWord}
                 onChangeText={setNewWord}
                 placeholder="Word"
-                placeholderTextColor="#475569"
-                style={inputStyle}
+                placeholderTextColor={colors.placeholder}
+                style={inputStyle(colors)}
               />
               <TextInput
                 value={newMeaning}
                 onChangeText={setNewMeaning}
                 placeholder="Meaning"
-                placeholderTextColor="#475569"
-                style={[inputStyle, { height: 70 }]}
+                placeholderTextColor={colors.placeholder}
+                style={[inputStyle(colors), { height: 70 }]}
                 multiline
               />
               <TextInput
                 value={newComment}
                 onChangeText={(t) => setNewComment(t.slice(0, 500))}
                 placeholder="Comment (optional, <= 500 chars)"
-                placeholderTextColor="#475569"
-                style={[inputStyle, { height: 60 }]}
+                placeholderTextColor={colors.placeholder}
+                style={[inputStyle(colors), { height: 60 }]}
                 multiline
               />
 
               {wordlistArray.length ? (
                 <View style={{ gap: 8 }}>
-                  <Text style={{ color: '#94a3b8', fontSize: 12, fontWeight: '700' }}>Add to wordlist (optional)</Text>
+                  <Text style={{ color: colors.textMuted, fontSize: 12, fontWeight: '700' }}>Add to wordlist (optional)</Text>
                   <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
                     {wordlistArray.map((wl) => (
                       <Pressable
@@ -173,32 +175,32 @@ export default function FlashcardsScreen() {
                           paddingVertical: 8,
                           paddingHorizontal: 12,
                           borderRadius: 10,
-                          backgroundColor: selectedWordlistId === wl.id ? '#a855f7' : '#0f172a',
+                          backgroundColor: selectedWordlistId === wl.id ? colors.accent : colors.surface2,
                           borderWidth: 1,
-                          borderColor: '#1f2937'
+                          borderColor: colors.border
                         }}
                       >
-                        <Text style={{ color: 'white', fontWeight: '700' }}>{wl.name}</Text>
+                        <Text style={{ color: selectedWordlistId === wl.id ? 'white' : colors.text, fontWeight: '700' }}>{wl.name}</Text>
                       </Pressable>
                     ))}
                   </View>
                 </View>
               ) : null}
 
-              <Pressable onPress={create} style={{ backgroundColor: '#22d3ee', padding: 12, borderRadius: 12, alignItems: 'center' }}>
-                <Text style={{ color: '#0f172a', fontWeight: '900' }}>Add</Text>
+              <Pressable onPress={create} style={{ backgroundColor: colors.accent2, padding: 12, borderRadius: 12, alignItems: 'center' }}>
+                <Text style={{ color: colors.onAccent, fontWeight: '900' }}>Add</Text>
               </Pressable>
             </View>
 
-            <View style={{ backgroundColor: '#111827', padding: 14, borderRadius: 16, borderWidth: 1, borderColor: '#1f2937', gap: 10 }}>
-              <Text style={{ color: '#e2e8f0', fontWeight: '700' }}>Filter</Text>
+            <View style={{ backgroundColor: colors.surface, padding: 14, borderRadius: 16, borderWidth: 1, borderColor: colors.border, gap: 10 }}>
+              <Text style={{ color: colors.text, fontWeight: '700' }}>Filter</Text>
               <TextInput
                 value={filter}
                 onChangeText={setFilter}
                 placeholder="Search your flashcards"
-                placeholderTextColor="#475569"
+                placeholderTextColor={colors.placeholder}
                 autoCapitalize="none"
-                style={inputStyle}
+                style={inputStyle(colors)}
               />
             </View>
           </View>
@@ -208,55 +210,55 @@ export default function FlashcardsScreen() {
           const isEditing = editingId === item.id;
 
           return (
-            <View style={{ backgroundColor: '#111827', padding: 16, borderRadius: 16, borderWidth: 1, borderColor: '#1f2937', gap: 10 }}>
+            <View style={{ backgroundColor: colors.surface, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: colors.border, gap: 10 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 12 }}>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: 'white', fontSize: 18, fontWeight: '800' }}>{item.word}</Text>
-                  <Text style={{ color: '#cbd5e1' }}>{item.meaning}</Text>
-                  <Text style={{ color: '#94a3b8', fontSize: 12 }}>Seen: {item.frequency}</Text>
-                  <Text style={{ color: '#475569', fontSize: 12 }}>
+                  <Text style={{ color: colors.text, fontSize: 18, fontWeight: '800' }}>{item.word}</Text>
+                  <Text style={{ color: colors.textSecondary }}>{item.meaning}</Text>
+                  <Text style={{ color: colors.textMuted, fontSize: 12 }}>Seen: {item.frequency}</Text>
+                  <Text style={{ color: colors.textFaint, fontSize: 12 }}>
                     {inWordlists.length ? `In: ${inWordlists.join(', ')}` : 'Not in any wordlist'}
                   </Text>
-                  {item.comment ? <Text style={{ color: '#94a3b8', marginTop: 6 }}>{item.comment}</Text> : null}
+                  {item.comment ? <Text style={{ color: colors.textMuted, marginTop: 6 }}>{item.comment}</Text> : null}
                 </View>
 
                 <View style={{ gap: 10 }}>
-                  <Pressable onPress={() => startEdit(item)} style={iconButton('#22d3ee')}>
-                    <Feather name="edit-3" size={16} color="#0f172a" />
+                  <Pressable onPress={() => startEdit(item)} style={iconButton(colors.accent2)}>
+                    <Feather name="edit-3" size={16} color={colors.onAccent} />
                   </Pressable>
-                  <Pressable onPress={() => confirmDelete(item.id)} style={iconButton('#f87171')}>
-                    <Feather name="trash-2" size={16} color="#0f172a" />
+                  <Pressable onPress={() => confirmDelete(item.id)} style={iconButton(colors.danger)}>
+                    <Feather name="trash-2" size={16} color="white" />
                   </Pressable>
                 </View>
               </View>
 
               {isEditing ? (
                 <View style={{ gap: 10 }}>
-                  <Text style={{ color: '#e2e8f0', fontWeight: '800' }}>Edit</Text>
-                  <TextInput value={editWord} onChangeText={setEditWord} placeholder="Word" placeholderTextColor="#475569" style={inputStyle} />
+                  <Text style={{ color: colors.text, fontWeight: '800' }}>Edit</Text>
+                  <TextInput value={editWord} onChangeText={setEditWord} placeholder="Word" placeholderTextColor={colors.placeholder} style={inputStyle(colors)} />
                   <TextInput
                     value={editMeaning}
                     onChangeText={setEditMeaning}
                     placeholder="Meaning"
-                    placeholderTextColor="#475569"
-                    style={[inputStyle, { height: 70 }]}
+                    placeholderTextColor={colors.placeholder}
+                    style={[inputStyle(colors), { height: 70 }]}
                     multiline
                   />
                   <TextInput
                     value={editComment}
                     onChangeText={(t) => setEditComment(t.slice(0, 500))}
                     placeholder="Comment (<= 500 chars)"
-                    placeholderTextColor="#475569"
-                    style={[inputStyle, { height: 60 }]}
+                    placeholderTextColor={colors.placeholder}
+                    style={[inputStyle(colors), { height: 60 }]}
                     multiline
                   />
 
                   <View style={{ flexDirection: 'row', gap: 10 }}>
-                    <Pressable onPress={saveEdit} style={pill('#a855f7')}>
+                    <Pressable onPress={saveEdit} style={pill(colors.accent)}>
                       <Text style={pillText('white')}>Save</Text>
                     </Pressable>
-                    <Pressable onPress={() => setEditingId(null)} style={pill('#1f2937')}>
-                      <Text style={pillText('white')}>Cancel</Text>
+                    <Pressable onPress={() => setEditingId(null)} style={pill(colors.surface2)}>
+                      <Text style={pillText(colors.text)}>Cancel</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -269,14 +271,14 @@ export default function FlashcardsScreen() {
   );
 }
 
-const inputStyle: TextStyle = {
-  backgroundColor: '#0f172a',
-  color: 'white',
+const inputStyle = (colors: AppColors): TextStyle => ({
+  backgroundColor: colors.surface2,
+  color: colors.text,
   padding: 12,
   borderRadius: 12,
   borderWidth: 1,
-  borderColor: '#1f2937'
-};
+  borderColor: colors.border
+});
 
 const iconButton = (bg: string): ViewStyle => ({
   backgroundColor: bg,

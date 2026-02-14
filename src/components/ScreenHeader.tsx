@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Text, View, type TextStyle, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAppTheme } from '@/theme/useAppTheme';
 
 type Props = {
   title: string;
@@ -9,12 +10,14 @@ type Props = {
 };
 
 export function ScreenHeader({ title, subtitle, right }: Props) {
+  const { colors } = useAppTheme();
+
   return (
-    <SafeAreaView edges={['top']} style={outer}>
+    <SafeAreaView edges={['top']} style={[outer, { backgroundColor: colors.header, borderBottomColor: colors.border }]}>
       <View style={container}>
         <View style={{ flex: 1 }}>
-          <Text style={titleStyle}>{title}</Text>
-          {subtitle ? <Text style={subtitleStyle}>{subtitle}</Text> : null}
+          <Text style={[titleStyle, { color: colors.text }]}>{title}</Text>
+          {subtitle ? <Text style={[subtitleStyle, { color: colors.textMuted }]}>{subtitle}</Text> : null}
         </View>
         {right ? <View style={rightStyle}>{right}</View> : null}
       </View>
@@ -23,7 +26,6 @@ export function ScreenHeader({ title, subtitle, right }: Props) {
 }
 
 const outer: ViewStyle = {
-  backgroundColor: '#0b1224',
   borderBottomWidth: 1,
   borderBottomColor: '#1f2937'
 };
@@ -43,13 +45,11 @@ const rightStyle: ViewStyle = {
 };
 
 const titleStyle: TextStyle = {
-  color: 'white',
   fontSize: 20,
   fontWeight: '900'
 };
 
 const subtitleStyle: TextStyle = {
-  color: '#94a3b8',
   fontSize: 12,
   marginTop: 4
 };

@@ -7,8 +7,10 @@ import { MotiView } from 'moti';
 import { useLibraryStore } from '@/store/useLibrary';
 import { OrderStrategy } from '@/types';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { useAppTheme, type AppColors } from '@/theme/useAppTheme';
 
 export default function WordlistsScreen() {
+  const { colors, gradient } = useAppTheme();
   const {
     wordlists,
     wordlistFlashcards,
@@ -23,19 +25,19 @@ export default function WordlistsScreen() {
   const countFor = (wordlistId: string) => wordlistFlashcards.filter((w) => w.wordlistId === wordlistId).length;
 
   return (
-    <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1 }}>
+    <LinearGradient colors={gradient} style={{ flex: 1 }}>
       <ScreenHeader title="Wordlists" />
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 18, gap: 14 }}>
-        <Text style={{ color: '#cbd5e1' }}>Create decks, reorder, and jump into Learn/Test.</Text>
+        <Text style={{ color: colors.textSecondary }}>Create decks, reorder, and jump into Learn/Test.</Text>
 
-        <View style={{ backgroundColor: '#111827', padding: 14, borderRadius: 16, gap: 12, borderWidth: 1, borderColor: '#1f2937' }}>
-          <Text style={{ color: '#e2e8f0', fontWeight: '700' }}>Create a wordlist</Text>
+        <View style={{ backgroundColor: colors.surface, padding: 14, borderRadius: 16, gap: 12, borderWidth: 1, borderColor: colors.border }}>
+          <Text style={{ color: colors.text, fontWeight: '700' }}>Create a wordlist</Text>
           <TextInput
             value={name}
             onChangeText={setName}
             placeholder="Name"
-            placeholderTextColor="#475569"
-            style={{ backgroundColor: '#0f172a', color: 'white', padding: 12, borderRadius: 12, borderWidth: 1, borderColor: '#1f2937' }}
+            placeholderTextColor={colors.placeholder}
+            style={{ backgroundColor: colors.surface2, color: colors.text, padding: 12, borderRadius: 12, borderWidth: 1, borderColor: colors.border }}
           />
           <Pressable
             onPress={() => {
@@ -46,7 +48,7 @@ export default function WordlistsScreen() {
                 Alert.alert('Limit', e.message);
               }
             }}
-            style={{ backgroundColor: '#a855f7', padding: 12, borderRadius: 12, alignItems: 'center' }}
+            style={{ backgroundColor: colors.accent, padding: 12, borderRadius: 12, alignItems: 'center' }}
           >
             <Text style={{ color: 'white', fontWeight: '700' }}>Add</Text>
           </Pressable>
@@ -61,40 +63,40 @@ export default function WordlistsScreen() {
               from={{ opacity: 0, translateY: 12 }}
               animate={{ opacity: 1, translateY: 0 }}
               transition={{ delay: index * 40 }}
-              style={{ backgroundColor: '#111827', padding: 16, borderRadius: 16, borderWidth: 1, borderColor: '#1f2937', gap: 12 }}
+              style={{ backgroundColor: colors.surface, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: colors.border, gap: 12 }}
             >
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View>
-                  <Text style={{ color: 'white', fontSize: 18, fontWeight: '700' }}>{item.name}</Text>
-                  <Text style={{ color: '#94a3b8', fontSize: 12 }}>{countFor(item.id)} cards - Order: {item.order}</Text>
+                  <Text style={{ color: colors.text, fontSize: 18, fontWeight: '700' }}>{item.name}</Text>
+                  <Text style={{ color: colors.textMuted, fontSize: 12 }}>{countFor(item.id)} cards - Order: {item.order}</Text>
                 </View>
                 <Pressable
                   onPress={() => confirmDelete(() => deleteWordlist(item.id))}
                   style={{ padding: 8 }}
                 >
-                  <Feather name="trash-2" size={18} color="#f87171" />
+                  <Feather name="trash-2" size={18} color={colors.danger} />
                 </Pressable>
               </View>
 
-              <OrderRow current={item.order} onSelect={(order) => reorderWordlist(item.id, order)} />
+              <OrderRow current={item.order} onSelect={(order) => reorderWordlist(item.id, order)} colors={colors} />
 
               <View style={{ flexDirection: 'row', gap: 10 }}>
                 <Link href={`/wordlists/${item.id}`} asChild>
-                  <Pressable style={pill('#22d3ee')}>
-                    <Feather name="edit-3" size={16} color="#0f172a" />
-                    <Text style={pillText('#0f172a')}>Manage</Text>
+                  <Pressable style={pill(colors.accent2)}>
+                    <Feather name="edit-3" size={16} color={colors.onAccent} />
+                    <Text style={pillText(colors.onAccent)}>Manage</Text>
                   </Pressable>
                 </Link>
                 <Link href={{ pathname: '/wordlists/learn', params: { id: item.id } }} asChild>
-                  <Pressable style={pill('#a855f7')}>
+                  <Pressable style={pill(colors.accent)}>
                     <Feather name="play" size={16} color="white" />
                     <Text style={pillText('white')}>Learn</Text>
                   </Pressable>
                 </Link>
                 <Link href={{ pathname: '/wordlists/test', params: { id: item.id } }} asChild>
-                  <Pressable style={pill('#f59e0b')}>
-                    <Feather name="zap" size={16} color="#0f172a" />
-                    <Text style={pillText('#0f172a')}>Test</Text>
+                  <Pressable style={pill(colors.warning)}>
+                    <Feather name="zap" size={16} color={colors.onAccent} />
+                    <Text style={pillText(colors.onAccent)}>Test</Text>
                   </Pressable>
                 </Link>
               </View>
@@ -106,7 +108,7 @@ export default function WordlistsScreen() {
   );
 }
 
-function OrderRow({ current, onSelect }: { current: OrderStrategy; onSelect: (order: OrderStrategy) => void }) {
+function OrderRow({ current, onSelect, colors }: { current: OrderStrategy; onSelect: (order: OrderStrategy) => void; colors: AppColors }) {
   const options: OrderStrategy[] = ['created_at', 'alpha', 'shuffle'];
   return (
     <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -115,11 +117,11 @@ function OrderRow({ current, onSelect }: { current: OrderStrategy; onSelect: (or
           paddingVertical: 8,
           paddingHorizontal: 12,
           borderRadius: 10,
-          backgroundColor: current === opt ? '#1d4ed8' : '#0f172a',
+          backgroundColor: current === opt ? colors.accent : colors.surface2,
           borderWidth: 1,
-          borderColor: '#1f2937'
+          borderColor: colors.border
         }}>
-          <Text style={{ color: 'white', fontWeight: '700', fontSize: 12 }}>{opt}</Text>
+          <Text style={{ color: current === opt ? 'white' : colors.text, fontWeight: '700', fontSize: 12 }}>{opt}</Text>
         </Pressable>
       ))}
     </View>

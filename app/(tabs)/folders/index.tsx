@@ -4,22 +4,30 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 import { useLibraryStore } from '@/store/useLibrary';
 import { ScreenHeader } from '@/components/ScreenHeader';
+import { useAppTheme } from '@/theme/useAppTheme';
 
 export default function FoldersScreen() {
+  const { colors, gradient } = useAppTheme();
   const { folders, addFolder, deleteFolder, wordlists, folderWordlists, addWordlistToFolder, removeWordlistFromFolder } = useLibraryStore();
   const [name, setName] = useState('New Folder');
   const folderArray = useMemo(() => Object.values(folders), [folders]);
   const wordlistArray = useMemo(() => Object.values(wordlists), [wordlists]);
 
   return (
-    <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1 }}>
+    <LinearGradient colors={gradient} style={{ flex: 1 }}>
       <ScreenHeader title="Folders" />
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 18, gap: 14 }}>
-        <Text style={{ color: '#cbd5e1' }}>Group wordlists for courses or themes.</Text>
+        <Text style={{ color: colors.textSecondary }}>Group wordlists for courses or themes.</Text>
 
-        <View style={{ backgroundColor: '#111827', padding: 14, borderRadius: 16, gap: 10, borderWidth: 1, borderColor: '#1f2937' }}>
-          <Text style={{ color: '#e2e8f0', fontWeight: '700' }}>Create folder</Text>
-          <TextInput value={name} onChangeText={setName} placeholder="Name" placeholderTextColor="#475569" style={inputStyle} />
+        <View style={{ backgroundColor: colors.surface, padding: 14, borderRadius: 16, gap: 10, borderWidth: 1, borderColor: colors.border }}>
+          <Text style={{ color: colors.text, fontWeight: '700' }}>Create folder</Text>
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            placeholder="Name"
+            placeholderTextColor={colors.placeholder}
+            style={inputStyle(colors)}
+          />
           <Pressable
             onPress={() => {
               try {
@@ -29,7 +37,7 @@ export default function FoldersScreen() {
                 Alert.alert('Limit', e.message);
               }
             }}
-            style={{ backgroundColor: '#a855f7', padding: 12, borderRadius: 12, alignItems: 'center' }}
+            style={{ backgroundColor: colors.accent, padding: 12, borderRadius: 12, alignItems: 'center' }}
           >
             <Text style={{ color: 'white', fontWeight: '800' }}>Add</Text>
           </Pressable>
@@ -42,14 +50,14 @@ export default function FoldersScreen() {
           renderItem={({ item }) => {
             const wlIds = folderWordlists.filter((fw) => fw.folderId === item.id).map((fw) => fw.wordlistId);
             return (
-              <View style={{ backgroundColor: '#111827', padding: 16, borderRadius: 16, borderWidth: 1, borderColor: '#1f2937', gap: 10 }}>
+              <View style={{ backgroundColor: colors.surface, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: colors.border, gap: 10 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   <View>
-                    <Text style={{ color: 'white', fontSize: 18, fontWeight: '700' }}>{item.name}</Text>
-                    <Text style={{ color: '#94a3b8', fontSize: 12 }}>{wlIds.length} wordlists</Text>
+                    <Text style={{ color: colors.text, fontSize: 18, fontWeight: '700' }}>{item.name}</Text>
+                    <Text style={{ color: colors.textMuted, fontSize: 12 }}>{wlIds.length} wordlists</Text>
                   </View>
                   <Pressable onPress={() => confirmDelete(() => deleteFolder(item.id))} style={{ padding: 6 }}>
-                    <Feather name="trash-2" size={18} color="#f87171" />
+                    <Feather name="trash-2" size={18} color={colors.danger} />
                   </Pressable>
                 </View>
 
@@ -58,20 +66,20 @@ export default function FoldersScreen() {
                     const wl = wordlists[id];
                     if (!wl) return null;
                     return (
-                      <Pressable key={id} onPress={() => removeWordlistFromFolder(item.id, id)} style={chip('#22d3ee')}>
-                        <Text style={chipText('#0f172a')}>{wl.name}</Text>
-                        <Feather name="x" size={14} color="#0f172a" />
+                      <Pressable key={id} onPress={() => removeWordlistFromFolder(item.id, id)} style={chip(colors.accent2, colors.border)}>
+                        <Text style={chipText(colors.onAccent)}>{wl.name}</Text>
+                        <Feather name="x" size={14} color={colors.onAccent} />
                       </Pressable>
                     );
                   })}
-                  <Text style={{ color: '#475569', alignSelf: 'center' }}>{wlIds.length === 0 ? 'No wordlists yet' : ''}</Text>
+                  <Text style={{ color: colors.textFaint, alignSelf: 'center' }}>{wlIds.length === 0 ? 'No wordlists yet' : ''}</Text>
                 </ScrollView>
 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
                   {wordlistArray.map((wl) => (
-                    <Pressable key={wl.id} onPress={() => addWordlistToFolder(item.id, wl.id)} style={chip('#1f2937')}>
-                      <Text style={chipText('white')}>{wl.name}</Text>
-                      <Feather name="plus" size={14} color="white" />
+                    <Pressable key={wl.id} onPress={() => addWordlistToFolder(item.id, wl.id)} style={chip(colors.surface2, colors.border)}>
+                      <Text style={chipText(colors.text)}>{wl.name}</Text>
+                      <Feather name="plus" size={14} color={colors.text} />
                     </Pressable>
                   ))}
                 </ScrollView>
@@ -91,20 +99,22 @@ function confirmDelete(onConfirm: () => void) {
   ]);
 }
 
-const inputStyle: TextStyle = {
-  backgroundColor: '#0f172a',
-  color: 'white',
+const inputStyle = (colors: { surface2: string; text: string; border: string }): TextStyle => ({
+  backgroundColor: colors.surface2,
+  color: colors.text,
   padding: 12,
   borderRadius: 12,
   borderWidth: 1,
-  borderColor: '#1f2937'
-};
+  borderColor: colors.border
+});
 
-const chip = (bg: string): ViewStyle => ({
+const chip = (bg: string, borderColor: string): ViewStyle => ({
   backgroundColor: bg,
   paddingVertical: 8,
   paddingHorizontal: 10,
   borderRadius: 12,
+  borderWidth: 1,
+  borderColor,
   flexDirection: 'row',
   gap: 6,
   alignItems: 'center'

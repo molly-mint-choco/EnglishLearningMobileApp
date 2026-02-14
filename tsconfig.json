@@ -27,6 +27,9 @@
       "@/lib/*": [
         "src/lib/*"
       ],
+      "@/theme/*": [
+        "src/theme/*"
+      ],
       "@/types": [
         "src/types"
       ],

@@ -5,8 +5,10 @@ import { Pressable, Text, View, type TextStyle, type ViewStyle } from 'react-nat
 import { MotiView } from 'moti';
 import { useLibraryStore } from '@/store/useLibrary';
 import { Flashcard } from '@/types';
+import { useAppTheme } from '@/theme/useAppTheme';
 
 export default function TestScreen() {
+  const { colors, gradient, isDark } = useAppTheme();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { wordlists, wordlistFlashcards, flashcards, bumpFrequency } = useLibraryStore();
   const wordlist = wordlists[id!];
@@ -24,35 +26,52 @@ export default function TestScreen() {
   if (!wordlist || cards.length === 0) return null;
 
   return (
-    <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1, paddingTop: 48 }}>
-      <Stack.Screen options={{ headerShown: true, headerTitle: `Test - ${wordlist.name}`, headerTintColor: 'white', headerStyle: { backgroundColor: '#0f172a' }, statusBarStyle: 'light', statusBarColor: '#0f172a' }} />
+    <LinearGradient colors={gradient} style={{ flex: 1 }}>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerTitle: `Test - ${wordlist.name}`,
+          headerTintColor: colors.text,
+          headerStyle: { backgroundColor: colors.header },
+          statusBarStyle: isDark ? 'light' : 'dark',
+          statusBarColor: colors.header
+        }}
+      />
       <View style={{ flex: 1, padding: 20, gap: 20 }}>
         <MotiView
           from={{ rotateY: revealed ? '-90deg' : '90deg', opacity: 0 }}
           animate={{ rotateY: '0deg', opacity: 1 }}
           transition={{ type: 'timing', duration: 300 }}
           key={`${card.id}-${revealed}`}
-          style={{ backgroundColor: '#111827', borderRadius: 18, padding: 20, borderWidth: 1, borderColor: '#1f2937', gap: 10 }}
+          style={{ backgroundColor: colors.surface, borderRadius: 18, padding: 20, borderWidth: 1, borderColor: colors.border, gap: 10 }}
         >
-          <Text style={{ color: '#a855f7', fontWeight: '700', fontSize: 12 }}>Card {idx + 1} / {cards.length}</Text>
-          <Text style={{ color: 'white', fontSize: 28, fontWeight: '800' }}>{card.word}</Text>
+          <Text style={{ color: colors.accent, fontWeight: '700', fontSize: 12 }}>
+            Card {idx + 1} / {cards.length}
+          </Text>
+          <Text style={{ color: colors.text, fontSize: 28, fontWeight: '800' }}>{card.word}</Text>
           {revealed ? (
             <View style={{ gap: 8 }}>
-              <Text style={{ color: '#e2e8f0', fontSize: 16 }}>{card.meaning}</Text>
-              {card.comment ? <Text style={{ color: '#94a3b8', fontSize: 13 }}>Note: {card.comment}</Text> : null}
-              <Text style={{ color: '#cbd5e1', fontSize: 12 }}>Frequency: {card.frequency}</Text>
+              <Text style={{ color: colors.textSecondary, fontSize: 16 }}>{card.meaning}</Text>
+              {card.comment ? <Text style={{ color: colors.textMuted, fontSize: 13 }}>Note: {card.comment}</Text> : null}
+              <Text style={{ color: colors.textMuted, fontSize: 12 }}>Frequency: {card.frequency}</Text>
             </View>
           ) : (
-            <Text style={{ color: '#475569', fontSize: 14 }}>Tap reveal to see the meaning.</Text>
+            <Text style={{ color: colors.textFaint, fontSize: 14 }}>Tap reveal to see the meaning.</Text>
           )}
         </MotiView>
 
         <View style={{ flexDirection: 'row', gap: 12 }}>
-          <Pressable onPress={() => { setRevealed(true); bumpFrequency(card.id); }} style={pill('#22d3ee')}>
-            <Text style={pillText('#0f172a')}>Reveal</Text>
+          <Pressable
+            onPress={() => {
+              setRevealed(true);
+              bumpFrequency(card.id);
+            }}
+            style={pill(colors.accent2)}
+          >
+            <Text style={pillText(colors.onAccent)}>Reveal</Text>
           </Pressable>
-          <Pressable onPress={next} style={pill('#1f2937')}>
-            <Text style={pillText('white')}>Skip</Text>
+          <Pressable onPress={next} style={pill(colors.surface2)}>
+            <Text style={pillText(colors.text)}>Skip</Text>
           </Pressable>
         </View>
       </View>
