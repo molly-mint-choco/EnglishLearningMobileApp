@@ -50,7 +50,7 @@ export default function WordlistDetail() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 18, paddingTop: 48, gap: 16, backgroundColor: '#0f172a', flexGrow: 1 }}>
-      <Stack.Screen options={{ headerShown: true, headerTitle: wordlist.name, headerTintColor: 'white', headerStyle: { backgroundColor: '#0f172a' } }} />
+      <Stack.Screen options={{ headerShown: true, headerTitle: wordlist.name, headerTintColor: 'white', headerStyle: { backgroundColor: '#0f172a' }, statusBarStyle: 'light', statusBarColor: '#0f172a' }} />
 
       <Text style={{ color: 'white', fontSize: 20, fontWeight: '800' }}>{wordlist.name}</Text>
       {wordlist.comment ? <Text style={{ color: '#94a3b8' }}>{wordlist.comment}</Text> : null}

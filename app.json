@@ -12,6 +12,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#0f172a"
     },
+    "statusBar": {
+      "style": "light",
+      "backgroundColor": "#0b1224"
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true

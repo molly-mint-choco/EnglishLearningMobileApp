@@ -21,7 +21,7 @@ export default function LearnScreen() {
 
   return (
     <LinearGradient colors={["#0f172a", "#0b1224"]} style={{ flex: 1, paddingTop: 48 }}>
-      <Stack.Screen options={{ headerShown: true, headerTitle: `Learn - ${wordlist.name}`, headerTintColor: 'white', headerStyle: { backgroundColor: '#0f172a' } }} />
+      <Stack.Screen options={{ headerShown: true, headerTitle: `Learn - ${wordlist.name}`, headerTintColor: 'white', headerStyle: { backgroundColor: '#0f172a' }, statusBarStyle: 'light', statusBarColor: '#0f172a' }} />
       <View style={{ flex: 1, padding: 20, gap: 20 }}>
         <MotiView
           from={{ opacity: 0, translateY: 14 }}
